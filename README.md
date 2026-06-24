@@ -1,5 +1,4 @@
 # crypto-risk-analytics
-# Cryptocurrency Risk Analytics Platform
 
 ## Project Overview
 
