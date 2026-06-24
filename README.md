@@ -1,11 +1,11 @@
 # crypto-risk-analytics
-Cryptocurrency volatility forecasting and risk analysis using ARMA-GARCH models in R
 # Cryptocurrency Risk Analytics Platform
 
 ## Project Overview
 
-This project investigates the volatility, persistence, and downside risk of major cryptocurrencies using financial econometric techniques in R.
+Cryptocurrencies are among the most volatile financial assets in modern markets. Understanding their risk characteristics is essential for investors, portfolio managers, and financial institutions.
 
+This project analyses the volatility dynamics and downside risk of five major cryptocurrencies using advanced financial econometric models. The study compares volatility persistence, asymmetric shock responses, and Value-at-Risk measures to identify which cryptocurrency exhibits the greatest market risk.
 The cryptocurrencies analysed are:
 
 - Bitcoin (BTC)
@@ -15,19 +15,21 @@ The cryptocurrencies analysed are:
 
 ## Research Question
 
-Which cryptocurrency exhibits the highest volatility persistence and market risk?
+Which cryptocurrency exhibits the highest volatility persistence, strongest response to adverse market shocks, and greatest downside risk?
 
 ## Methods
 
 - Data collection from Yahoo Finance
 - Log return calculation
-- Descriptive statistics
-- ADF stationarity testing
-- ARMA modelling
-- GARCH volatility modelling
-- Value-at-Risk (VaR) analysis
-- Volatility forecasting
-
+- Descriptive statistical analysis
+- Stationarity testing using the Augmented Dickey-Fuller (ADF) test
+- ARCH effect testing
+- GARCH(1,1) volatility modelling
+- GJR-GARCH(1,1) asymmetric volatility modelling
+- EGARCH(1,1) volatility modelling
+- Volatility persistence comparison
+- Value-at-Risk (VaR) estimation
+- Volatility forecasting and risk ranking
 ## Tools
 
 - R
@@ -35,6 +37,10 @@ Which cryptocurrency exhibits the highest volatility persistence and market risk
 - quantmod
 - rugarch
 - tidyverse
+
+## Expected Outcomes
+
+The project identifies which cryptocurrency presents the highest level of market risk and evaluates whether negative shocks have a greater impact on volatility than positive shocks. The findings provide insights into cryptocurrency risk management and portfolio allocation decisions.
 
 ## Author
 
