@@ -16,7 +16,7 @@ Currently the project analyses:
 
 The project is fully reproducible and can be updated automatically as new market data become available.
 
-## Research obj
+## Research objectives
 To develop an automated forecasting framework that continuously evaluates cryptocurrency market risk using modern financial econometric models.
 
 The project aims to answer:
