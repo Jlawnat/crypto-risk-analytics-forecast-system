@@ -279,7 +279,41 @@ write.csv(
   row.names = FALSE
 )
 
+best_models <- model_comparison %>%
+  group_by(Cryptocurrency) %>%
+  slice_min(AIC, n = 1, with_ties = FALSE) %>%
+  ungroup()
 
+write.csv(
+  best_models,
+  "outputs/tables/best_models.csv",
+  row.names = FALSE
+)
+
+cat("Best volatility model for each cryptocurrency:\n")
+print(best_models)
+
+best_fitted_models <- list()
+
+for (i in 1:nrow(best_models)) {
+  
+  coin <- best_models$Cryptocurrency[i]
+  model <- best_models$Model[i]
+  
+  if (model == "GARCH(1,1)") {
+    best_fitted_models[[coin]] <- garch_models[[coin]]
+  } else if (model == "GJR-GARCH(1,1)") {
+    best_fitted_models[[coin]] <- gjr_models[[coin]]
+  } else {
+    best_fitted_models[[coin]] <- egarch_models[[coin]]
+  }
+  
+}
+
+saveRDS(
+  best_fitted_models,
+  "outputs/models/best_models.rds"
+)
 
 
 
