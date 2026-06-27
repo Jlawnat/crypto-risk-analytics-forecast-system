@@ -134,14 +134,22 @@ The project automatically generates:
 ## Software
 
 - R
-- tidyverse
-- rugarch
-- quantmod
-- PerformanceAnalytics
-- ggplot2
 - Quarto
 
 ---
+
+## Installation
+
+Install the required packages:
+install.packages(c(
+  "tidyverse",
+  "quantmod",
+  "rugarch",
+  "PerformanceAnalytics",
+  "tseries",
+  "knitr",
+  "quarto"
+))
 
 ## Future Improvements
 
