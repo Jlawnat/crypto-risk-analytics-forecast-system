@@ -77,28 +77,98 @@ knitr::kable(var)
 ## Forecast plots
 
 ```{r}
-
 library(ggplot2)
+library(dplyr)
+library(readr)
+library(rugarch)
+
+# Load data
+returns <- read_csv(
+  "../data/processed/cleaned_returns.csv",
+  show_col_types = FALSE
+)
+
+best_models <- readRDS("../outputs/models/best_models.rds")
 
 coins <- c("BTC", "ETH", "SOL", "BNB")
 
+split <- floor(0.8 * nrow(returns))
+
 for (coin in coins) {
 
+  # Load fitted model
+  fit <- best_models[[coin]]
+
+  # Load forecast results
   forecast_df <- read_csv(
     paste0("../outputs/forecasts/", coin, "_forecast.csv"),
     show_col_types = FALSE
   )
 
-  p <- ggplot(forecast_df,
-              aes(x = Date, y = Forecast_Volatility)) +
-    geom_line(color = "steelblue", linewidth = 0.8) +
-    labs(
-      title = paste(coin, "Forecast Volatility"),
-      x = "Date",
-      y = "Forecast Volatility"
+  # Historical fitted volatility
+ hist_sigma <- as.numeric(sigma(fit))
+
+hist_vol <- tibble(
+  Date = tail(returns$Date, length(hist_sigma)),
+  Volatility = hist_sigma,
+  Type = "Historical"
+)
+
+  # Forecast volatility
+  forecast_vol <- tibble(
+    Date = as.Date(forecast_df$Date),
+    Volatility = forecast_df$Forecast_Volatility,
+    Type = "Forecast"
+  )
+
+  # Only display the most recent history
+  plot_df <- bind_rows(
+    tail(hist_vol, 250),
+    forecast_vol
+  )
+
+  forecast_start <- max(hist_vol$Date)
+
+  p <- ggplot(plot_df,
+              aes(x = Date,
+                  y = Volatility,
+                  colour = Type)) +
+
+    geom_line(linewidth = 1) +
+
+    geom_vline(
+      xintercept = forecast_start,
+      linetype = "dashed",
+      colour = "grey50"
     ) +
-    theme_minimal()
+
+    scale_colour_manual(
+      values = c(
+        Historical = "#1F4E79",
+        Forecast = "#D62728"
+      )
+    ) +
+
+    labs(
+      title = paste(coin, "Conditional Volatility"),
+      subtitle = "Historical fitted volatility and forecasted conditional volatility",
+      x = "Date",
+      y = "Conditional Volatility",
+      colour = ""
+    ) +
+
+    theme_minimal(base_size = 13) +
+
+    theme(
+      legend.position = "top",
+      plot.title = element_text(face = "bold"),
+      panel.grid.minor = element_blank()
+    )
 
   print(p)
+
 }
+
+
+
 ```
