@@ -134,14 +134,10 @@ The project automatically generates:
 ## Software
 
 - R
-- tidyverse
-- rugarch
-- quantmod
-- PerformanceAnalytics
-- ggplot2
 - Quarto
 
 ---
+
 
 ## Usage
 
@@ -154,6 +150,20 @@ Run the scripts in the following order:
 5. Render `report/report.qmd`
 
 All figures, tables, forecasts, and the final report will be generated automatically.
+
+## Installation
+
+Install the required packages:
+install.packages(c(
+  "tidyverse",
+  "quantmod",
+  "rugarch",
+  "PerformanceAnalytics",
+  "tseries",
+  "knitr",
+  "quarto"
+))
+
 
 ## Future Improvements
 
