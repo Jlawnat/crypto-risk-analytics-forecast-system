@@ -81,8 +81,6 @@ library(ggplot2)
 library(dplyr)
 library(readr)
 library(rugarch)
-
-# Load data
 returns <- read_csv(
   "../data/processed/cleaned_returns.csv",
   show_col_types = FALSE
@@ -96,37 +94,33 @@ split <- floor(0.8 * nrow(returns))
 
 for (coin in coins) {
 
-  # Load fitted model
   fit <- best_models[[coin]]
 
-  # Load forecast results
+
   forecast_df <- read_csv(
     paste0("../outputs/forecasts/", coin, "_forecast.csv"),
     show_col_types = FALSE
   )
-
-  # Historical fitted volatility
- hist_sigma <- as.numeric(sigma(fit))
-
-hist_vol <- tibble(
-  Date = tail(returns$Date, length(hist_sigma)),
-  Volatility = hist_sigma,
+  hist_vol <- tibble(
+  Date = returns$Date,
+  Volatility = as.numeric(sigma(fit)),
   Type = "Historical"
 )
-
-  # Forecast volatility
   forecast_vol <- tibble(
-    Date = as.Date(forecast_df$Date),
-    Volatility = forecast_df$Forecast_Volatility,
-    Type = "Forecast"
-  )
+  Date = seq(
+    from = max(hist_vol$Date) + 1,
+    by = "day",
+    length.out = nrow(forecast_df)
+  ),
+  Volatility = forecast_df$Forecast_Volatility,
+  Type = "Forecast"
+)
 
-  # Only display the most recent history
   plot_df <- bind_rows(
-    tail(hist_vol, 250),
+    tail(hist_vol, 300),
     forecast_vol
-  )
-
+)
+  
   forecast_start <- max(hist_vol$Date)
 
   p <- ggplot(plot_df,
@@ -166,7 +160,13 @@ hist_vol <- tibble(
     )
 
   print(p)
-
+  ggsave(
+  filename = paste0("../figures/", coin, "_volatility_forecast.png"),
+  plot = p,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
 }
 
 
